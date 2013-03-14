@@ -15,6 +15,7 @@ def install_sentry():
         run('pip install MySQL-python')
         run('pip install eventlet')
         run('pip install sentry')
+        run('pip install -U raven') # Fix 401 error
         run('pip freeze')
 
 def cat_sentry_conf():
