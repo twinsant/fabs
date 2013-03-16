@@ -4,6 +4,7 @@ from fabric.api import run
 from fabric.api import prefix
 from fabric.api import put
 from fabric.api import sudo
+from fabric.api import cd
 
 def mk_ve_sentry():
     '''fab -H user@host mk_ve_sentry
@@ -52,3 +53,36 @@ def config_mysql():
     i = raw_input('Will overwrite /etc/my.cnf. [nY]: ')
     if i == 'Y':
         put_root('my.cnf', '/etc/')
+
+def install_build():
+    sudo('apt-get install build-essential libpcre3-dev zlib1g-dev libssl-dev tcl8.5')
+
+def install_redis():
+    latest = 'redis-2.6.10.tar.gz'
+
+    run('mkdir -p dl')
+    with cd('dl'):
+        run('pwd')
+        run('rm -f %s' % latest)
+        run('wget http://redis.googlecode.com/files/%s' % latest)
+    run('tar -zxvf dl/%s' % latest)
+    with cd(latest.replace('.tar.gz', '')):
+        run('make')
+        run('make test')
+
+def restart_redis():
+    sudo('/etc/init.d/redis_6379 stop')
+    sudo('/etc/init.d/redis_6379 start')
+
+def config_redis():
+    latest = 'redis-2.6.10.tar.gz'
+    with cd('%s/utils' % latest.replace('.tar.gz', '')):
+        # Press enter and set redis exe path, e.g. /home/twinsant/redis-2.6.10/src/redis-server
+        sudo('./install_server.sh')
+    sudo('mkdir -p /srv/db/redis/6379')
+    # 6379.conf change lines: bind, dir
+    put_root('6379.conf', '/etc/redis/')
+    # redis_6379 change lines: EXEC, CLIEXEC, REDISHOST
+    put_root('redis_6379', '/etc/init.d/')
+    sudo('chmod +x /etc/init.d/redis_6379')
+    restart_redis()
