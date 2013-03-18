@@ -86,3 +86,7 @@ def config_redis():
     put_root('redis_6379', '/etc/init.d/')
     sudo('chmod +x /etc/init.d/redis_6379')
     restart_redis()
+
+def ntpdate():
+    sudo('/usr/sbin/ntpdate 1.pool.ntp.org')
+    run('date')
