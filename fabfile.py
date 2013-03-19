@@ -93,3 +93,6 @@ def ntpdate():
 
 def install_svn():
     sudo('apt-get install subversion')
+
+def install_venv():
+    sudo('apt-get install virtualenvwrapper')
