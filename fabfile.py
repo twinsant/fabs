@@ -90,3 +90,6 @@ def config_redis():
 def ntpdate():
     sudo('/usr/sbin/ntpdate 1.pool.ntp.org')
     run('date')
+
+def install_svn():
+    sudo('apt-get install subversion')
