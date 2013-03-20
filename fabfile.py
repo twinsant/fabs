@@ -5,6 +5,8 @@ from fabric.api import prefix
 from fabric.api import put
 from fabric.api import sudo
 from fabric.api import cd
+from fabric.api import local
+from fabric.contrib.files import exists
 
 def mk_ve_sentry():
     '''fab -H user@host mk_ve_sentry
@@ -97,3 +99,18 @@ def install_svn():
 def install_venv():
     sudo('pip install virtualenvwrapper')
     run('mkdir -p ~/.virtualenvs')
+
+def config_venv():
+    # Modify .bashrc
+    # export WORKON_HOME=~/.virtualenvs
+    # source /usr/local/bin/virtualenvwrapper.sh
+    run('cat ~/.bashrc')
+
+def install_supervisor():
+    sudo('pip install supervisor')
+
+def config_supervisor():
+    if not exists('/etc/supervisord.conf'):
+        sudo('/usr/local/bin/echo_supervisord_conf > /etc/supervisord.conf')
+    else:
+        local('cat supervisord.conf')
