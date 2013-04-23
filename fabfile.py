@@ -114,3 +114,9 @@ def config_supervisor():
         sudo('/usr/local/bin/echo_supervisord_conf > /etc/supervisord.conf')
     else:
         local('cat supervisord.conf')
+
+# fab -H git@host git_bare_init --set project=foo
+def git_bare_init():
+    project_dir = '%s.git' % env.project
+    run('mkdir %s' % project_dir)
+    run('cd %s&&git --bare init' % project_dir)
