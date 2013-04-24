@@ -120,3 +120,17 @@ def git_bare_init():
     project_dir = '%s.git' % env.project
     run('mkdir %s' % project_dir)
     run('cd %s&&git --bare init' % project_dir)
+
+def install_blockhosts():
+    run('mkdir -p dl')
+    with cd('dl'):
+        run('pwd')
+        run('rm -f BlockHosts-2.6.0.tar.gz')
+        run('wget http://www.aczoom.com/tools/blockhosts/BlockHosts-2.6.0.tar.gz')
+    run('tar -zxvf dl/BlockHosts-2.6.0.tar.gz')
+    with cd('BlockHosts-2.6.0'):
+        sudo('python setup.py install')
+
+def config_blockhosts():
+    put_root('blockhosts.cfg', '/etc/')
+    put_root('hosts.allow', '/etc/')
