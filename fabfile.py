@@ -6,6 +6,7 @@ from fabric.api import put
 from fabric.api import sudo
 from fabric.api import cd
 from fabric.api import local
+from fabric.api import env
 from fabric.contrib.files import exists
 
 def mk_ve_sentry():
