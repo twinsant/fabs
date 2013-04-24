@@ -135,3 +135,7 @@ def install_blockhosts():
 def config_blockhosts():
     put_root('blockhosts.cfg', '/etc/')
     put_root('hosts.allow', '/etc/')
+
+# Nginx
+def config_nginx_logrotate():
+    put_root('logrotate.d/nginx', '/etc/')
