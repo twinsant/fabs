@@ -135,3 +135,31 @@ def install_blockhosts():
 def config_blockhosts():
     put_root('blockhosts.cfg', '/etc/')
     put_root('hosts.allow', '/etc/')
+
+# Nginx
+def install_nginx():
+    latest = 'nginx-1.2.7.tar.gz'
+
+    run('mkdir -p dl')
+    with cd('dl'):
+        run('pwd')
+        run('rm -f %s' % latest)
+        run('wget http://nginx.org/download/%s' % latest)
+    run('tar -zxvf dl/%s' % latest)
+    with cd(latest.replace('.tar.gz', '')):
+        run('./configure')
+        run('make')
+        sudo('make install')
+
+def start_nginx():
+    sudo('/usr/local/nginx/sbin/nginx')
+
+def reload_nginx():
+    sudo('/usr/local/nginx/sbin/nginx -s reload')
+
+def install_munin_node():
+    sudo('apt-get install munin-node')
+
+def config_munin_node():
+    put_root('munin-node.conf', '/etc/munin/')
+    sudo('service munin-node restart')
