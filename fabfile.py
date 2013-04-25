@@ -163,3 +163,6 @@ def install_munin_node():
 def config_munin_node():
     put_root('munin-node.conf', '/etc/munin/')
     sudo('service munin-node restart')
+
+def config_nginx_logrotate():
+    put_root('logrotate.d/nginx', '/etc/')
