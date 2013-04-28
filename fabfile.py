@@ -165,3 +165,13 @@ def config_munin_node():
 
 def config_nginx_logrotate():
     put_root('logrotate.d/nginx', '/etc/')
+
+def install_distribute():
+    with cd('dl'):
+        run('curl -O http://python-distribute.org/distribute_setup.py')
+        sudo('python distribute_setup.py')
+
+def install_pip():
+    with cd('dl'):
+        run('curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py')
+        sudo('python get-pip.py')
