@@ -60,16 +60,16 @@ def config_mysql():
 def install_build():
     sudo('apt-get install build-essential libpcre3-dev zlib1g-dev libssl-dev tcl8.5')
 
+# Redis
+LATEST_REDIS = 'redis-2.6.12.tar.gz'
 def install_redis():
-    latest = 'redis-2.6.10.tar.gz'
-
     run('mkdir -p dl')
     with cd('dl'):
         run('pwd')
-        run('rm -f %s' % latest)
-        run('wget http://redis.googlecode.com/files/%s' % latest)
-    run('tar -zxvf dl/%s' % latest)
-    with cd(latest.replace('.tar.gz', '')):
+        run('rm -f %s' % LATEST_REDIS)
+        run('wget http://redis.googlecode.com/files/%s' % LATEST_REDIS)
+    run('tar -zxvf dl/%s' % LATEST_REDIS)
+    with cd(LATEST_REDIS.replace('.tar.gz', '')):
         run('make')
         run('make test')
 
@@ -78,8 +78,7 @@ def restart_redis():
     sudo('/etc/init.d/redis_6379 start')
 
 def config_redis():
-    latest = 'redis-2.6.10.tar.gz'
-    with cd('%s/utils' % latest.replace('.tar.gz', '')):
+    with cd('%s/utils' % LATEST_REDIS.replace('.tar.gz', '')):
         # Press enter and set redis exe path, e.g. /home/twinsant/redis-2.6.10/src/redis-server
         sudo('./install_server.sh')
     sudo('mkdir -p /srv/db/redis/6379')
