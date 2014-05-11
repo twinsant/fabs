@@ -116,8 +116,9 @@ def config_supervisor():
     else:
         local('cat supervisord.conf')
 
-# fab -H git@host git_bare_init --set project=foo
 def git_bare_init():
+    """fab -H git@host git_bare_init --set project=foo
+    """
     project_dir = '%s.git' % env.project
     run('mkdir %s' % project_dir)
     run('cd %s&&git --bare init' % project_dir)
