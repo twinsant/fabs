@@ -138,7 +138,7 @@ def config_blockhosts():
 
 # Nginx
 def install_nginx():
-    latest = 'nginx-1.2.7.tar.gz'
+    latest = 'nginx-1.7.0.tar.gz'
 
     run('mkdir -p dl')
     with cd('dl'):
@@ -150,6 +150,32 @@ def install_nginx():
         run('./configure')
         run('make')
         sudo('make install')
+
+def install_nginx_opt():
+    latest = 'nginx-1.7.0.tar.gz'
+
+    with cd('/opt'):
+        sudo('pwd')
+        sudo('rm -f %s' % latest)
+        sudo('wget http://nginx.org/download/%s' % latest)
+        sudo('tar -zxvf %s' % latest)
+    with cd('/opt/%s' % latest.replace('.tar.gz', '')):
+        sudo('./configure --prefix=/opt/nginx --user=nginx --group=nginx --with-http_ssl_module')
+        sudo('make')
+        sudo('make install')
+    # adduser --system --no-create-home --disabled-login --disabled-password --group nginx
+
+def init_nginx():
+    sudo('wget -O init-deb.sh http://library.linode.com/assets/1139-init-deb.sh')
+    sudo('mv init-deb.sh /etc/init.d/nginx')
+    sudo('chmod +x /etc/init.d/nginx')
+    sudo('/usr/sbin/update-rc.d -f nginx defaults')
+
+def init_nginx_start():
+    sudo('/etc/init.d/nginx start')
+
+def init_nginx_reload():
+    sudo('/etc/init.d/nginx reload')
 
 def start_nginx():
     sudo('/usr/local/nginx/sbin/nginx')
@@ -176,3 +202,7 @@ def install_pip():
     with cd('dl'):
         run('curl -O https://raw.github.com/pypa/pip/master/contrib/get-pip.py')
         sudo('python get-pip.py')
+
+def ubuntu_update():
+    sudo('apt-get update')
+    sudo('apt-get upgrade --show-upgraded')
